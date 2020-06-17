@@ -1,0 +1,41 @@
+h1,
+h5,
+p {
+    text-align: center;
+}
+
+li {
+    overflow: auto;
+}
+
+.high {
+    color: white;
+    background-color: red;
+}
+
+.medium {
+    color: black;
+    background-color: goldenrod;
+}
+
+.low {
+    color: black;
+    background-color: lightgreen;
+}
+
+.badge {
+    font-size: 100%;
+}
+
+#weather-icon {
+    max-width: 50px;
+    max-height: 50px;
+}
+
+#forecast-row {
+    justify-content: center;
+}
+
+#rain {
+    background-image: url(../images/raining.jpg);
+}

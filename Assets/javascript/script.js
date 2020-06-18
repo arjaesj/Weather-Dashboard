@@ -6,12 +6,12 @@ var weatherCol = $("#weather-col");
 var apiKey = "3b92877da3eba435a634ec7b8dfd4ba8";
 var currentWeatherUrl;
 var forecastUrl;
-var storedSearches = [];
+var storedCities = [];
 
-//Populates stored searches from local storage
+//Retrieves stored searched Cities from local storage then convert it into an array
 var tempStoredSearches = localStorage.getItem("storedSearches");
 if (tempStoredSearches !== null)
-    storedSearches = tempStoredSearches.split(",");
+    storedCities = tempStoredSearches.split(",");
 
 //Creates current date variable
 var today = new Date();
@@ -88,8 +88,6 @@ function populateWeatherForecast() {
         method: "GET"
     }).then(function(response) {
 
-        console.log(response);
-
         var temporaryForecastObj;
 
         //Gets the weather data for around 24 hours after the API call, and 24 hours after that for the five day forecast, then populates forecast array
@@ -103,21 +101,21 @@ function populateWeatherForecast() {
             fiveDayForecastArray.push(temporaryForecastObj);
         }
 
-        //Format dates for every object in the array
+        //Apply formatDates function to the 5 day forecast array
         for (var i = 0; i < fiveDayForecastArray.length; i++) {
             fiveDayForecastArray[i].date = formatDates(fiveDayForecastArray[i].date);
         }
 
-        //Creates HTML elements to populate page with forecast data
-        var forecastHeader = $('<h5>5-Day Forecast:</h5>');
-        $("#forecast-header").append(forecastHeader);
+        //Creates HTML elements to display 5 day forcast cards
+        var fiveDayForecast = $("<h5>5-Day Forecast:</h5>");
+        $("#forecast-header").append(fiveDayForecast);
 
         for (var i = 0; i < fiveDayForecastArray.length; i++) {
-            var forecastCard = $('<div class="col-lg-2 col-sm-3 mb-1"><span class="badge badge-primary"><h5>' + fiveDayForecastArray[i].date + '</h5>' +
-                '<p><img class="w-100" src="http://openweathermap.org/img/wn/' + fiveDayForecastArray[i].weatherIcon + '@2x.png"></p>' +
-                '<p>Temp: ' + fiveDayForecastArray[i].temperature + '°C</p>' +
-                '<p>Humidity: ' + fiveDayForecastArray[i].humidity + '%</p>' +
-                '<span></div>');
+            var forecastCard = $("<div class='col-lg-2 col-sm-3 mb-1'><span class='badge badge-primary'><h5>" + fiveDayForecastArray[i].date + "</h5>" +
+                "<p><img class='w-100' src='http://openweathermap.org/img/wn/" + fiveDayForecastArray[i].weatherIcon + "@2x.png'></p>" +
+                "<p>Temp: " + fiveDayForecastArray[i].temperature + "°C</p>" +
+                "<p>Humidity: " + fiveDayForecastArray[i].humidity + "%</p>" +
+                "<span></div>");
             $("#forecast-row").append(forecastCard);
         }
     });
@@ -127,39 +125,39 @@ function renderStoredSearches() {
 
     $("#search-history").empty();
 
-    //If the search bar value is not empty, adds the value to the front of the storedSearches array
-    //Also checks if the value is a duplicate value and repositions the value to the front of the array if it is
+    //If the search bar input is not empty, prepends the value of the input to the storedCities array
+    //Check if the input is a duplicate value in the storedCities array then reposition the value to the front of the array if it is
     if ($("#search-bar").val() != "") {
-        if (storedSearches.indexOf($("#search-bar").val()) != -1) {
-            storedSearches.splice(storedSearches.indexOf($("#search-bar").val()), 1)
+        if (storedCities.indexOf($("#search-bar").val()) != -1) {
+            storedCities.splice(storedCities.indexOf($("#search-bar").val()), 1)
         }
-        storedSearches.unshift($("#search-bar").val());
+        storedCities.unshift($("#search-bar").val());
     }
 
-    //Saves storedSearches to local storage
-    localStorage.setItem("storedSearches", storedSearches);
+    //Stores searched Cities to local storage
+    localStorage.setItem("Searched Cities", storedCities);
 
-    //Creates search history list items to show under the search bar
-    for (var i = 0; i < storedSearches.length; i++) {
-        var newListItem = $('<li class="list-group-item">' + storedSearches[i] + '</li>');
-        $("#search-history").append(newListItem);
+    //Appends searched Cities on a list below the search bar
+    for (var i = 0; i < storedCities.length; i++) {
+        var cityList = $('<li class="list-group-item">' + storedCities[i] + '</li>');
+        $("#search-history").append(cityList);
     }
 
-    //Allows user to search for list items they click on
+    //On click event that re-displays populated searched City's weather
     $("li").on("click", function() {
         $("#search-bar").val($(event.target).text());
         searchButton.click();
     });
 }
 
-//Changes the date to month/day/year format
+//Changes the date to dd/mm/yyyy format (Australian date format)
 function formatDates(data) {
     var dateArray = data.split("-");
     var formattedDate = dateArray[2] + "/" + dateArray[1] + "/" + dateArray[0];
     return formattedDate
 }
 
-// On click event for starting the search function
+//On click event for starting the search function
 searchButton.on("click", function() {
     currentWeatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + searchBar.val() + "&units=metric&appid=" + apiKey;
     forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchBar.val() + "&units=metric&appid=" + apiKey;

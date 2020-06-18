@@ -18,33 +18,31 @@
 
     <div class="jumbotron">
         <h1 class="display-3">Weather Dashboard</h1>
-        <p class="lead">Type in the City name below to see the current wether & the 5 day forecast</p>
+        <p class="lead">Type in the City name below to see the current weather & the 5 day forecast</p>
     </div>
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Search Bar and Search history  -->
-            <div class="col-3" id="search-col">Search for a city:
+            <!-- Column for Search input  -->
+            <div class="col-3" id="search-col">Search for a City:
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="search-bar" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <input type="text" class="form-control" id="search-bar" aria-label="City Search" aria-describedby="button-addon2" placeholder="type in City name">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button" id="search-btn"><i class="fa fa-search"
                                 aria-hidden="true"></i></button>
                     </div>
                 </div>
 
-                <!-- Search history goes here -->
+                <!--  List of populated searched Cities -->
                 <ul class="list-group mt-3" id="search-history"></ul>
 
             </div>
 
-            <!-- Weather Details -->
+            <!-- City Weather results --> 
             <div class="col-9" id="weather-details">
                 <div class="row">
                     <div class="col mb-2 p-0" id="weather-col">
-                        <div class="card">
-                            <div class="card-body" id="rain"></div>
-                        </div>
+                       <!-- weather results html elements go here -->
                     </div>
 
                 </div>
@@ -52,7 +50,9 @@
                 <div class="row">
                     <div class="col">
                         <div class='row'>
-                            <div class="col" id="forecast-header"></div>
+                            <div class="col" id="forecast-header">
+                                <!-- 5 day forecast cards go here -->
+                            </div>
                         </div>
                         <div class="row" id="forecast-row"></div>
                     </div>

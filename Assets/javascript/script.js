@@ -29,9 +29,13 @@ function populateCurrentWeather() {
         //Create ogject where the location weather data will be populated 
         var currentWeatherObj = {
             location: response.name,
+            cityCountry: response.sys.country,
             date: currentDate,
-            weatherIcon: responseformatDates[0].icon,
-            temperature: Math.round(response.main.temp),
+            weatherIcon: response.weather[0].icon,
+            weatherDescription: response.weather[0].main,
+            currentTemperature: Math.round(response.main.temp),
+            maxTemperature: Math.round(response.main.temp_max),
+            minTemperature: Math.round(response.main.temp_min),
             humidity: response.main.humidity,
             wind: response.wind.speed,
             uvIndex: 0,
@@ -61,15 +65,32 @@ function populateCurrentWeather() {
             else
                 currentWeatherObj.uvIntensity = "medium";
 
-            //Generates a card with all current weather info and appends it to the weather-col element
-            var currentWeatherCard = $('<div class="card"><div class="card-body"><h5 class="card-title">' + currentWeatherObj.location + ' (' + currentWeatherObj.date + ') ' +
+            //Create a card containing the weather data of the last searched City.
+            var currentWeatherCard = $('<div class="card"><div class="card-body"><h5 class="card-title">' + currentWeatherObj.location + ', ' + currentWeatherObj.cityCountry + ' (' + currentWeatherObj.date + ') ' +
                 '<span class="badge badge-primary"><img id="weather-icon" src="http://openweathermap.org/img/wn/' + currentWeatherObj.weatherIcon + '@2x.png"></span></h5>' +
-
-                '<p class="card-text">Temperature: ' + currentWeatherObj.temperature + ' °C</p>' +
+                '<p class="card-text">Current Temperature: ' + currentWeatherObj.currentTemperature + ' °C</p>' +
+                '<p class="card-text">Max Temperature: ' + currentWeatherObj.maxTemperature + ' °C</p>' +
+                '<p class="card-text">Min Temperature: ' + currentWeatherObj.minTemperature + ' °C</p>' +
                 '<p class="card-text">Humidity: ' + currentWeatherObj.humidity + '%</p>' +
                 '<p class="card-text">Wind Speed: ' + currentWeatherObj.wind + ' kmph</p>' +
                 '<p class="card-text">UV Index: <span class="badge badge-secondary ' + currentWeatherObj.uvIntensity + '">' + currentWeatherObj.uvIndex + '</span>')
             $("#weather-col").append(currentWeatherCard);
+
+            if (currentWeatherObj.weatherDescription == "Drizzle") {
+                $(".card-body").attr("id", "drizzle");
+            } else if (currentWeatherObj.weatherDescription == "Clear") {
+                $(".card-body").attr("id", "clear");
+            } else if (currentWeatherObj.weatherDescription == "Clouds") {
+                $(".card-body").attr("id", "clouds");
+            } else if (currentWeatherObj.weatherDescription == "Rain") {
+                $(".card-body").attr("id", "rain");
+            } else if (currentWeatherObj.weatherDescription == "Thunderstorm") {
+                $(".card-body").attr("id", "thunderstorm");
+            } else if (currentWeatherObj.weatherDescription == "Snow") {
+                $(".card-body").attr("id", "snow");
+            } else if (currentWeatherObj.weatherDescription == "Mist") {
+                $(".card-body").attr("id", "mist");
+            }
         });
 
         renderStoredSearches();
@@ -94,7 +115,8 @@ function populateWeatherForecast() {
             temporaryForecastObj = {
                 date: response.list[i].dt_txt.split(" ")[0],
                 weatherIcon: response.list[i].weather[0].icon,
-                temperature: Math.round(response.list[i].main.temp),
+                maxTemp: Math.round(response.list[i].main.temp_max),
+                minTemp: Math.round(response.list[i].main.feels_like),
                 humidity: response.list[i].main.humidity
             };
             fiveDayForecastArray.push(temporaryForecastObj);
@@ -112,7 +134,8 @@ function populateWeatherForecast() {
         for (var i = 0; i < fiveDayForecastArray.length; i++) {
             var forecastCard = $("<div class='col-lg-2 col-sm-3 mb-1'><span class='badge badge-primary'><h5>" + fiveDayForecastArray[i].date + "</h5>" +
                 "<p><img class='w-100' src='http://openweathermap.org/img/wn/" + fiveDayForecastArray[i].weatherIcon + "@2x.png'></p>" +
-                "<p>Temp: " + fiveDayForecastArray[i].temperature + "°C</p>" +
+                "<p>Max Temp: " + fiveDayForecastArray[i].maxTemp + "°C</p>" +
+                "<p>Min Temp: " + fiveDayForecastArray[i].minTemp + "°C</p>" +
                 "<p>Humidity: " + fiveDayForecastArray[i].humidity + "%</p>" +
                 "<span></div>");
             $("#forecast-row").append(forecastCard);

@@ -13,25 +13,24 @@ var tempStoredSearches = localStorage.getItem("storedSearches");
 if (tempStoredSearches !== null)
     storedCities = tempStoredSearches.split(",");
 
-//Creates current date variable
+//Create variable for currebt date
 var today = new Date();
 var currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
 
 function populateCurrentWeather() {
 
+    //Current weather API call
     $.ajax({
         url: currentWeatherUrl,
         method: "GET"
     }).then(function(response) {
 
-        console.log(response);
-
-        //Object to store current weather data
+        //Create ogject where the location weather data will be populated 
         var currentWeatherObj = {
             location: response.name,
             date: currentDate,
-            weatherIcon: response.weather[0].icon,
+            weatherIcon: responseformatDates[0].icon,
             temperature: Math.round(response.main.temp),
             humidity: response.main.humidity,
             wind: response.wind.speed,
@@ -39,10 +38,10 @@ function populateCurrentWeather() {
             uvIntensity: ""
         };
 
-        //Format the date for the object 
+        //Apply the formatDate function to the date value the object 
         currentWeatherObj.date = formatDates(currentWeatherObj.date);
 
-        //Call to get UV index 
+        //Call to get UV index of searched city.
         var latitude = response.coord.lat;
         var longitude = response.coord.lon;
         var currentUvUrl = "https://api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&appid=" + apiKey;
@@ -63,7 +62,7 @@ function populateCurrentWeather() {
                 currentWeatherObj.uvIntensity = "medium";
 
             //Generates a card with all current weather info and appends it to the weather-col element
-            var currentWeatherCard = $('<div class="card"><div class="card-body" id="rain"><h5 class="card-title">' + currentWeatherObj.location + ' (' + currentWeatherObj.date + ') ' +
+            var currentWeatherCard = $('<div class="card"><div class="card-body"><h5 class="card-title">' + currentWeatherObj.location + ' (' + currentWeatherObj.date + ') ' +
                 '<span class="badge badge-primary"><img id="weather-icon" src="http://openweathermap.org/img/wn/' + currentWeatherObj.weatherIcon + '@2x.png"></span></h5>' +
 
                 '<p class="card-text">Temperature: ' + currentWeatherObj.temperature + ' °C</p>' +
@@ -90,7 +89,7 @@ function populateWeatherForecast() {
 
         var temporaryForecastObj;
 
-        //Gets the weather data for around 24 hours after the API call, and 24 hours after that for the five day forecast, then populates forecast array
+        //Runs the loop to populate the weather data needed to display in the card
         for (var i = 4; i < response.list.length; i += 8) {
             temporaryForecastObj = {
                 date: response.list[i].dt_txt.split(" ")[0],

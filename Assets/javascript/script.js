@@ -1,7 +1,5 @@
 var searchBar = $("#search-bar");
 var searchButton = $("#search-btn");
-var searchHistory = $("#search-history");
-var weatherCol = $("#weather-col");
 
 var apiKey = "3b92877da3eba435a634ec7b8dfd4ba8";
 var currentWeatherUrl;
@@ -73,7 +71,7 @@ function populateCurrentWeather() {
                 '<p class="card-text">Min Temperature: ' + currentWeatherObj.minTemperature + ' °C</p>' +
                 '<p class="card-text">Humidity: ' + currentWeatherObj.humidity + '%</p>' +
                 '<p class="card-text">Wind Speed: ' + currentWeatherObj.wind + ' kmph</p>' +
-                '<p class="card-text">UV Index: <span class="badge badge-secondary ' + currentWeatherObj.uvIntensity + '">' + currentWeatherObj.uvIndex + '</span>')
+                '<p class="card-text">UV Index: <span class="badge badge-secondary ' + currentWeatherObj.uvIntensity + '">' + currentWeatherObj.uvIndex + '</span>');
             $("#weather-col").append(currentWeatherCard);
 
             if (currentWeatherObj.weatherDescription == "Drizzle") {
@@ -123,20 +121,20 @@ function populateWeatherForecast() {
         }
 
         //Apply formatDates function to the 5 day forecast array
-        for (var i = 0; i < fiveDayForecastArray.length; i++) {
-            fiveDayForecastArray[i].date = formatDates(fiveDayForecastArray[i].date);
+        for (var j = 0; j < fiveDayForecastArray.length; j++) {
+            fiveDayForecastArray[j].date = formatDates(fiveDayForecastArray[j].date);
         }
 
         //Creates HTML elements to display 5 day forcast cards
         var fiveDayForecast = $("<h5>5-Day Forecast:</h5>");
         $("#forecast-header").append(fiveDayForecast);
 
-        for (var i = 0; i < fiveDayForecastArray.length; i++) {
-            var forecastCard = $("<div class='col-lg-2 col-sm-3 mb-1'><span class='badge badge-primary'><h5>" + fiveDayForecastArray[i].date + "</h5>" +
-                "<p><img class='w-100' src='http://openweathermap.org/img/wn/" + fiveDayForecastArray[i].weatherIcon + "@2x.png'></p>" +
-                "<p>Max Temp: " + fiveDayForecastArray[i].maxTemp + "°C</p>" +
-                "<p>Min Temp: " + fiveDayForecastArray[i].minTemp + "°C</p>" +
-                "<p>Humidity: " + fiveDayForecastArray[i].humidity + "%</p>" +
+        for (var k = 0; k < fiveDayForecastArray.length; k++) {
+            var forecastCard = $("<div class='col-lg-2 col-sm-3 mb-1'><span class='badge badge-primary'><h5>" + fiveDayForecastArray[k].date + "</h5>" +
+                "<p><img class='w-100' src='http://openweathermap.org/img/wn/" + fiveDayForecastArray[k].weatherIcon + "@2x.png'></p>" +
+                "<p>Max Temp: " + fiveDayForecastArray[k].maxTemp + "°C</p>" +
+                "<p>Min Temp: " + fiveDayForecastArray[k].minTemp + "°C</p>" +
+                "<p>Humidity: " + fiveDayForecastArray[k].humidity + "%</p>" +
                 "<span></div>");
             $("#forecast-row").append(forecastCard);
         }
@@ -149,9 +147,9 @@ function renderStoredSearches() {
 
     //If the search bar input is not empty, prepends the value of the input to the storedCities array
     //Check if the input is a duplicate value in the storedCities array then reposition the value to the front of the array if it is
-    if ($("#search-bar").val() != "") {
+    if ($("#search-bar").val() !== "") {
         if (storedCities.indexOf($("#search-bar").val()) != -1) {
-            storedCities.splice(storedCities.indexOf($("#search-bar").val()), 1)
+            storedCities.splice(storedCities.indexOf($("#search-bar").val()), 1);
         }
         storedCities.unshift($("#search-bar").val());
     }
@@ -176,7 +174,7 @@ function renderStoredSearches() {
 function formatDates(data) {
     var dateArray = data.split("-");
     var formattedDate = dateArray[2] + "/" + dateArray[1] + "/" + dateArray[0];
-    return formattedDate
+    return formattedDate;
 }
 
 //On click event for starting the search function

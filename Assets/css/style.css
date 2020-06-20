@@ -3,6 +3,21 @@
     text-align: center;
 }
 
+.card-body h5,
+.card-body p {
+    color: white;
+    font-weight: 900;
+}
+
+.card-body h5 {
+    font-size: 1.5rem;
+}
+
+.card-body p {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
 li {
     overflow: auto;
     cursor: pointer;
@@ -25,6 +40,10 @@ li {
 
 .badge {
     font-size: 100%;
+}
+
+.card {
+    margin-right: 15px;
 }
 
 #weather-icon {

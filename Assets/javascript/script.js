@@ -13,7 +13,7 @@ var tempStoredSearches = localStorage.getItem("storedSearches");
 if (tempStoredSearches !== null)
     storedCities = tempStoredSearches.split(",");
 
-//Create variable for currebt date
+//Create variable for current date
 var today = new Date();
 var currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
